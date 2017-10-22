@@ -1,6 +1,9 @@
 # Laravel Video Chat
 Laravel Video Chat using Socket.IO and WebRTC
 
+[![Latest Stable Version](https://poser.pugx.org/php-junior/laravel-video-chat/v/stable)](https://packagist.org/packages/php-junior/laravel-video-chat)
+[![Total Downloads](https://poser.pugx.org/php-junior/laravel-video-chat/downloads)](https://packagist.org/packages/php-junior/laravel-video-chat)
+
 ## Installation
 ```php
 composer require php-junior/laravel-video-chat
