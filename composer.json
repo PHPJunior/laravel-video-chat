@@ -1,0 +1,42 @@
+{
+    "name": "php-junior/laravel-video-chat",
+    "description": "Laravel Video Chat using Socket.IO and WebRTC",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Nyi Nyi Lwin",
+            "email": "nyinyilwin1992@hotmail.com"
+        }
+    ],
+    "keywords": [
+        "laravel",
+        "socket.io",
+        "video-chat",
+        "chat",
+        "realtime",
+        "webrtc"
+    ],
+    "require": {
+        "php": ">=5.6.4",
+        "predis/predis": "^1.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "PhpJunior\\LaravelVideoChat\\": "src/"
+        },
+        "files": [
+            "helper/helpers.php"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "PhpJunior\\LaravelVideoChat\\LaravelVideoChatServiceProvider"
+            ],
+            "aliases": {
+                "Chat": "PhpJunior\\LaravelVideoChat\\Facades\\Chat"
+            }
+        }
+    }
+}
