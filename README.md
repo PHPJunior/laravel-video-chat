@@ -235,6 +235,8 @@ Chat::leaveFromGroupConversation($groupConversationId);
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
 
+[Demo Project](https://github.com/PHPJunior/laravel-video-chat-demo)
+
 ## Support on Beerpay
 Hey dude! Help me out for a couple of :beers:!
 
