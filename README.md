@@ -234,3 +234,8 @@ Chat::leaveFromGroupConversation($groupConversationId);
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+
+## Support on Beerpay
+Hey dude! Help me out for a couple of :beers:!
+
+[![Beerpay](https://beerpay.io/PHPJunior/laravel-video-chat/badge.svg?style=beer-square)](https://beerpay.io/PHPJunior/laravel-video-chat)  [![Beerpay](https://beerpay.io/PHPJunior/laravel-video-chat/make-wish.svg?style=flat-square)](https://beerpay.io/PHPJunior/laravel-video-chat?focus=wish)
