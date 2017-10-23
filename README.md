@@ -227,6 +227,11 @@ Chat::leaveFromGroupConversation($groupConversationId);
 - Add Members to Group
 - Remove Member From Group
 
+## Next Version
+
+- File Sharing
+- Group Video Call
+
 ## Credits
 
 - All Contributors
