@@ -14,7 +14,7 @@ Laravel 5.5 uses Package Auto-Discovery, so doesn't require you to manually add 
 If you don't use auto-discovery, add the ServiceProvider to the providers array in config/app.php
 
 ```php
-PhpJunior\Laravel2C2P\Laravel2C2PServiceProvider::class,
+PhpJunior\LaravelVideoChat\LaravelVideoChatServiceProvider::class,
 ```
 
 ```php 
