@@ -42,7 +42,25 @@
             </div>
         </div>
         <div class="col-md-6">
-           <video-section></video-section>
+            <video-section></video-section>
+        </div>
+
+        <div id="incomingVideoCallModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Incoming Call</h4>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="answerCallButton" class="btn btn-success">Answer</button>
+                        <button type="button" id="denyCallButton" data-dismiss="modal" class="btn btn-danger">Deny</button>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
 </template>
@@ -51,6 +69,9 @@
     $(function () {
         var localVideo = document.getElementById('localVideo');
         var remoteVideo = document.getElementById('remoteVideo');
+        var answerButton = document.getElementById('answerCallButton');
+
+        answerButton.onclick = answerCall;
     });
 
     var conversationID;
@@ -155,7 +176,7 @@
             console.log('unknown signal type ' + m.subtype);
         }
     }
-    
+
     function onSignalClose() {
         trace('Ending call');
         pc.close();
@@ -163,11 +184,6 @@
 
         closeMedia();
         clearView();
-
-        //Send candidate to remote side
-        conversationID = Cookies.get('conversationID');
-        var message = {from: luid, to:ruid, type: 'signal', subtype: 'close', content: 'close', time:new Date()};
-        axios.post('/trigger/' + conversationID , message );
     }
 
     function closeMedia(){
@@ -211,13 +227,14 @@
 
     function onSignalOffer(offer){
         Cookies.set('offer', offer);
-        answerCall();
+        $('#incomingVideoCallModal').modal('show');
     }
 
     function answerCall() {
         isCaller = false;
         luid = Cookies.get('uuid');
         ruid = Cookies.get('remoteUUID');
+        $('#incomingVideoCallModal').modal('hide');
         start()
     }
 
@@ -243,10 +260,10 @@
                 }
             }
         })
-        .then(gotStream)
-        .catch(function(e) {
-            alert('getUserMedia() error: ' + e.name);
-        });
+            .then(gotStream)
+            .catch(function(e) {
+                alert('getUserMedia() error: ' + e.name);
+            });
     }
 
     function call() {
