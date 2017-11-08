@@ -8,10 +8,14 @@
 
 namespace PhpJunior\LaravelVideoChat\Models\Group\Conversation\Relationship;
 
+use PhpJunior\LaravelVideoChat\Models\File\File;
 use PhpJunior\LaravelVideoChat\Models\Message\Message;
 
 trait GroupConversationRelationship
 {
+    /**
+     * @return mixed
+     */
     public function users()
     {
         return $this->belongsToMany(
@@ -28,5 +32,13 @@ trait GroupConversationRelationship
     public function messages()
     {
         return $this->morphMany(Message::class,'conversation');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function files()
+    {
+        return $this->morphMany(File::class,'conversation');
     }
 }

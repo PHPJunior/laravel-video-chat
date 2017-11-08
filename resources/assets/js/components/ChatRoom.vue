@@ -1,65 +1,87 @@
 <template>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <span class="glyphicon glyphicon-comment"></span> Chat with {{ withUser.name }}
+    <div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <span class="glyphicon glyphicon-comment"></span> Chat with {{ withUser.name }}
 
-                    <button class="btn btn-warning btn-sm pull-right" @click="startVideoCallToUser(withUser.id)" type="button">
-                        <span class="fa fa-video-camera"></span> Video Call
-                    </button>
-                </div>
-                <div class="panel-body">
-                    <ul class="chat" v-chat-scroll>
-                        <li class="clearfix" v-for="message in messages" v-bind:class="{ 'right' : check(message.sender.id), 'left' : !check(message.sender.id) }">
+                        <button class="btn btn-warning btn-sm pull-right" @click="startVideoCallToUser(withUser.id)" type="button">
+                            <span class="fa fa-video-camera"></span> Video Call
+                        </button>
+                    </div>
+                    <div class="panel-body">
+                        <ul class="chat" v-chat-scroll>
+                            <li class="clearfix" v-for="message in messages" v-bind:class="{ 'right' : check(message.sender.id), 'left' : !check(message.sender.id) }">
                             <span class="chat-img" v-bind:class="{ 'pull-right' : check(message.sender.id) , 'pull-left' : !check(message.sender.id) }">
                                 <img :src="'http://placehold.it/50/FA6F57/fff&text='+ message.sender.name" alt="User Avatar" class="img-circle" />
                             </span>
-                            <div class="chat-body clearfix">
-                                <div class="header">
-                                    <small class=" text-muted"><span class="glyphicon glyphicon-time"></span><timeago :since="message.created_at" :auto-update="10"></timeago></small>
-                                    <strong v-bind:class="{ 'pull-right' : check(message.sender.id) , 'pull-left' : !check(message.sender.id)}" class="primary-font">
-                                        {{ message.sender.name }}
-                                    </strong>
+                                <div class="chat-body clearfix">
+                                    <div class="header">
+                                        <small class=" text-muted"><span class="glyphicon glyphicon-time"></span><timeago :since="message.created_at" :auto-update="10"></timeago></small>
+                                        <strong v-bind:class="{ 'pull-right' : check(message.sender.id) , 'pull-left' : !check(message.sender.id)}" class="primary-font">
+                                            {{ message.sender.name }}
+                                        </strong>
+                                    </div>
+                                    <p v-bind:class="{ 'pull-right' : check(message.sender.id) , 'pull-left' : !check(message.sender.id)}">
+                                        {{ message.text }}
+                                    </p>
+                                    <div class="row">
+                                        <div class="col-md-3" v-for="file in message.files">
+                                            <img :src="file.file_details.webPath" alt="" class="img-responsive">
+                                            <a :href="file.file_details.webPath" target="_blank" download>Download - {{ file.name }}</a>
+                                        </div>
+                                    </div>
                                 </div>
-                                <p v-bind:class="{ 'pull-right' : check(message.sender.id) , 'pull-left' : !check(message.sender.id)}">
-                                    {{ message.text }}
-                                </p>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div class="panel-footer">
-                    <div class="input-group">
-                        <input id="btn-input" type="text" v-model="text" class="form-control input-sm" placeholder="Type your message here..." />
-                        <span class="input-group-btn">
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="panel-footer">
+                        <div class="input-group">
+                            <input id="btn-input" type="text" v-model="text" class="form-control input-sm" placeholder="Type your message here..." />
+                            <span class="input-group-btn">
                             <button class="btn btn-warning btn-sm" type="button" @click.prevent="send()" id="btn-chat">
                                 Send
                             </button>
                         </span>
+                        </div>
+                        <div class="input-group">
+                            <input type="file" multiple class="form-control">
+                            <span class="input-group-btn">
+                            <button class="btn btn-warning btn-sm" type="button" @click.prevent="sendFiles()">
+                                Send Files
+                            </button>
+                        </span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-6">
-            <video-section></video-section>
-        </div>
+            <div class="col-md-6">
+                <video-section></video-section>
+            </div>
 
-        <div id="incomingVideoCallModal" class="modal fade" role="dialog">
-            <div class="modal-dialog">
+            <div id="incomingVideoCallModal" class="modal fade" role="dialog">
+                <div class="modal-dialog">
 
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Incoming Call</h4>
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Incoming Call</h4>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id="answerCallButton" class="btn btn-success">Answer</button>
+                            <button type="button" id="denyCallButton" data-dismiss="modal" class="btn btn-danger">Deny</button>
+                        </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" id="answerCallButton" class="btn btn-success">Answer</button>
-                        <button type="button" id="denyCallButton" data-dismiss="modal" class="btn btn-danger">Deny</button>
-                    </div>
+
                 </div>
-
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3" v-for="file in conversation.files">
+                <img :src="file.file_details.webPath" alt="" class="img-responsive">
+                <a :href="file.file_details.webPath" target="_blank" download>Download - {{ file.name }}</a>
             </div>
         </div>
     </div>
@@ -72,7 +94,11 @@
         var answerButton = document.getElementById('answerCallButton');
 
         answerButton.onclick = answerCall;
+
+        $('input[type=file]').on('change', prepareUpload);
     });
+
+    var files;
 
     var conversationID;
     var luid;
@@ -127,12 +153,30 @@
                     this.text = '';
                 });
             },
+            sendFiles() {
+                var data = new FormData();
+
+                $.each(files, function(key, value)
+                {
+                    data.append('files[]', value);
+                });
+
+                data.append('conversationId' , this.conversationId);
+
+                axios.post('/chat/message/send/file', data);
+            },
             listenForNewMessage: function () {
                 Echo.join(this.channel)
                     .here((users) => {
                         console.log(users)
                     })
                     .listen('\\PhpJunior\\LaravelVideoChat\\Events\\NewConversationMessage', (data) => {
+                        var self = this;
+                        if ( data.files.length > 0 ){
+                            $.each( data.files , function( key, value ) {
+                                self.conversation.files.push(value);
+                            });
+                        }
                         this.messages.push(data);
                     })
                     .listen('\\PhpJunior\\LaravelVideoChat\\Events\\VideoChatStart', (data) => {
@@ -176,7 +220,7 @@
             console.log('unknown signal type ' + m.subtype);
         }
     }
-
+    
     function onSignalClose() {
         trace('Ending call');
         pc.close();
@@ -260,10 +304,10 @@
                 }
             }
         })
-            .then(gotStream)
-            .catch(function(e) {
-                alert('getUserMedia() error: ' + e.name);
-            });
+        .then(gotStream)
+        .catch(function(e) {
+            alert('getUserMedia() error: ' + e.name);
+        });
     }
 
     function call() {
@@ -425,6 +469,11 @@
     function trace(arg) {
         var now = (window.performance.now() / 1000).toFixed(3);
         console.log(now + ': ', arg);
+    }
+
+    function prepareUpload(event)
+    {
+        files = event.target.files;
     }
 </script>
 

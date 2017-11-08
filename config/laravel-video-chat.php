@@ -19,11 +19,15 @@ return [
         'conversations_table'   =>  'conversations',
         'messages_table'        =>  'messages',
         'group_conversations_table' =>  'group_conversations',
-        'group_users_table'     =>  'group_users'
+        'group_users_table'     =>  'group_users',
+        'files_table'           =>  'files'
     ],
     'channel'   =>  [
         'new_conversation_created'  =>  'new-conversation-created',
         'chat_room'                 =>  'chat-room',
         'group_chat_room'           =>  'group-chat-room'
+    ],
+    'upload' => [
+        'storage' => 'public'
     ]
 ];

@@ -23,17 +23,23 @@ class NewGroupConversationMessage implements ShouldBroadcast
      * @var
      */
     public $channel;
+    /**
+     * @var array
+     */
+    private $files;
 
     /**
      * Create a new event instance.
      *
      * @param $text
      * @param $channel
+     * @param array $files
      */
-    public function __construct($text , $channel)
+    public function __construct($text , $channel , $files = [])
     {
         $this->text = $text;
         $this->channel = $channel;
+        $this->files = $files;
     }
 
     /**
@@ -51,6 +57,7 @@ class NewGroupConversationMessage implements ShouldBroadcast
         return [
             'text' => $this->text,
             'sender' => check()->user(),
+            'files' => $this->files,
             'created_at' => Carbon::now()->format('Y-m-d H:i:s')
         ];
     }

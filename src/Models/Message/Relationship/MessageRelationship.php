@@ -2,6 +2,8 @@
 
 namespace PhpJunior\LaravelVideoChat\Models\Message\Relationship;
 
+use PhpJunior\LaravelVideoChat\Models\File\File;
+
 /**
  * Created by PhpStorm.
  * User: nyinyilwin
@@ -25,5 +27,13 @@ trait MessageRelationship
     public function sender()
     {
         return $this->belongsTo(config('laravel-video-chat.user.model') , 'user_id');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function files()
+    {
+        return $this->hasMany(File::class , 'message_id');
     }
 }

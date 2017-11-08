@@ -80,9 +80,20 @@ class Chat
         $this->conversation->startVideoCall( $data, $channel );
     }
 
+    /**
+     * @param $userId
+     */
     public function startConversationWith($userId)
     {
         $this->conversation->startConversationWith($this->userId , $userId);
+    }
+
+    /**
+     * @param $conversationId
+     */
+    public function acceptMessageRequest($conversationId)
+    {
+        $this->conversation->acceptMessageRequest($this->userId , $conversationId);
     }
 
     /**
@@ -164,5 +175,45 @@ class Chat
     public function leaveFromGroupConversation($groupConversationId)
     {
         $this->group->leaveFromGroupConversation($groupConversationId , $this->userId);
+    }
+
+    /**
+     * @param $conversationId
+     * @param $file
+     */
+    public function sendFilesInConversation($conversationId , $file)
+    {
+        $this->sendFiles($conversationId , $file , 'conversation');
+    }
+
+    /**
+     * @param $groupConversationId
+     * @param $file
+     */
+    public function sendFilesInGroupConversation($groupConversationId , $file)
+    {
+        $this->sendFiles($groupConversationId , $file , 'group');
+    }
+
+    private function sendFiles($id , $file , $type)
+    {
+        switch ($type) {
+            case 'conversation':
+                $this->conversation->sendFilesInConversation($id , [
+                    'file'      => $file,
+                    'text'      => 'File Sent',
+                    'user_id'   => $this->userId,
+                    'channel'   => $this->getChannelName($id,'chat_room')
+                ]);
+                break;
+            case 'group':
+                $this->group->sendFilesInConversation($id , [
+                    'file'      => $file,
+                    'text'      => 'File Sent',
+                    'user_id'   => $this->userId,
+                    'channel'   => $this->getChannelName($id,'group_chat_room')
+                ]);
+                break;
+        }
     }
 }

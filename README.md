@@ -42,12 +42,16 @@ return [
         'conversations_table'   =>  'conversations',
         'messages_table'        =>  'messages',
         'group_conversations_table' =>  'group_conversations',
-        'group_users_table'     =>  'group_users'
+        'group_users_table'     =>  'group_users',
+        'files_table'           =>  'files'
     ],
     'channel'   =>  [
         'new_conversation_created'  =>  'new-conversation-created',
         'chat_room'                 =>  'chat-room',
         'group_chat_room'           =>  'group-chat-room'
+    ],
+    'upload' => [
+        'storage' => 'public'
     ]
 ];
 ```
@@ -114,7 +118,9 @@ Run `npm run dev` to recompile your assets.
 ## Features
 
 - One To One Chat ( With Video Call )
+- Accept Message Request
 - Group Chat
+- File Sharing
 
 ## Usage
 
@@ -129,12 +135,23 @@ $conversations = Chat::getAllConversations()
 <ul class="list-group">
     @foreach($conversations as $conversation)
         <li class="list-group-item">
+        @if($conversation->message->conversation->is_accepted)
             <a href="#">
                 <h2>{{$conversation->user->name}}</h2>
                 @if(!is_null($conversation->message))
                     <span>{{ substr($conversation->message->text, 0, 20)}}</span>
                 @endif
             </a>
+         @else
+            <a href="#">
+                <h2>{{$conversation->user->name}}</h2>
+                @if($conversation->message->conversation->second_user_id == auth()->user()->id)
+                    <a href="accept_request_route" class="btn btn-xs btn-success">
+                        Accept Message Request
+                    </a>
+                @endif
+            </a>
+         @endif
         </li>
     @endforeach
 
@@ -152,6 +169,11 @@ $conversations = Chat::getAllConversations()
 #### Start Conversation 
 ```php
 Chat::startConversationWith($otherUserId);
+```
+
+#### Accept Conversation 
+```php
+Chat::acceptMessageRequest($conversationId);
 ```
 
 #### Get Conversation Messages
@@ -222,6 +244,22 @@ Chat::removeMembersFromGroupConversation($groupConversationId, [ $otherUserId , 
 Chat::leaveFromGroupConversation($groupConversationId);
 ```
 
+## File Sharing
+
+Run this command `php artisan storage:link`
+
+#### Send Files in Conversation
+
+```php
+Chat::sendFilesInConversation($conversationId , $request->file('files'));
+```
+
+#### Send Files in Group Conversation
+
+```php
+Chat::sendFilesInGroupConversation($groupConversationId , $request->file('files'));
+```
+
 ## ToDo
 
 - Add Members to Group
@@ -229,7 +267,6 @@ Chat::leaveFromGroupConversation($groupConversationId);
 
 ## Next Version
 
-- File Sharing
 - Group Video Call
 
 ## Credits

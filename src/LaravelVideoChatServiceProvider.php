@@ -2,6 +2,7 @@
 
 namespace PhpJunior\LaravelVideoChat;
 
+use Dflydev\ApacheMimeTypes\PhpRepository;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\ServiceProvider;
@@ -9,6 +10,7 @@ use PhpJunior\LaravelVideoChat\Facades\Chat;
 use PhpJunior\LaravelVideoChat\Repositories\GroupConversation\GroupConversationRepository;
 use PhpJunior\LaravelVideoChat\Services\Chat as ChatService;
 use PhpJunior\LaravelVideoChat\Repositories\Conversation\ConversationRepository;
+use PhpJunior\LaravelVideoChat\Services\UploadManager;
 
 class LaravelVideoChatServiceProvider extends ServiceProvider
 {
@@ -41,6 +43,7 @@ class LaravelVideoChatServiceProvider extends ServiceProvider
         $this->mergeConfigFrom($this->configPath(), 'laravel-video-chat');
         $this->registerFacade();
         $this->registerChat();
+        $this->registerUploadManager();
         $this->registerAlias();
     }
 
@@ -50,6 +53,16 @@ class LaravelVideoChatServiceProvider extends ServiceProvider
             $loader = \Illuminate\Foundation\AliasLoader::getInstance();
             $loader->alias('Chat', Chat::class);
         });
+    }
+
+    protected function registerUploadManager()
+    {
+        $this->app->singleton('upload.manager', function ($app) {
+            $mime = $app[PhpRepository::class];
+            $config = $app['config'];
+            return new UploadManager($config , $mime);
+        });
+        $this->app->alias('upload.manager', UploadManager::class);
     }
 
     protected function registerChat()
@@ -65,12 +78,14 @@ class LaravelVideoChatServiceProvider extends ServiceProvider
     protected function registerAlias()
     {
         $this->app->singleton('conversation.repository', function ($app) {
-            return new ConversationRepository();
+            $manger = $app['upload.manager'];
+            return new ConversationRepository($manger);
         });
         $this->app->alias('conversation.repository', ConversationRepository::class);
 
         $this->app->singleton('group.conversation.repository', function ($app) {
-            return new GroupConversationRepository();
+            $manger = $app['upload.manager'];
+            return new GroupConversationRepository($manger);
         });
         $this->app->alias('group.conversation.repository', GroupConversationRepository::class);
     }
@@ -129,7 +144,8 @@ class LaravelVideoChatServiceProvider extends ServiceProvider
     {
         return [
             'conversation.repository',
-            'group.conversation.repository'
+            'group.conversation.repository',
+            'upload.manager'
         ];
     }
 }
