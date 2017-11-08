@@ -24,6 +24,9 @@ php artisan vendor:publish --provider="PhpJunior\LaravelVideoChat\LaravelVideoCh
 And 
 ```php 
 php artisan migrate
+php artisan storage:link
+
+change APP_URL in .env
 ```
 
 This is the contents of the published config file:
