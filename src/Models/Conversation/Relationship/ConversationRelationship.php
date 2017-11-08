@@ -9,9 +9,8 @@ use PhpJunior\LaravelVideoChat\Models\Message\Message;
  * Created by PhpStorm.
  * User: nyinyilwin
  * Date: 10/17/17
- * Time: 10:31 AM
+ * Time: 10:31 AM.
  */
-
 trait ConversationRelationship
 {
     /**
@@ -19,7 +18,7 @@ trait ConversationRelationship
      */
     public function messages()
     {
-        return $this->morphMany(Message::class,'conversation');
+        return $this->morphMany(Message::class, 'conversation');
     }
 
     /**
@@ -27,7 +26,7 @@ trait ConversationRelationship
      */
     public function files()
     {
-        return $this->morphMany(File::class,'conversation');
+        return $this->morphMany(File::class, 'conversation');
     }
 
     /**
@@ -35,7 +34,7 @@ trait ConversationRelationship
      */
     public function firstUser()
     {
-        return $this->belongsTo(config('laravel-video-chat.user.model') , 'first_user_id');
+        return $this->belongsTo(config('laravel-video-chat.user.model'), 'first_user_id');
     }
 
     /**
@@ -43,6 +42,6 @@ trait ConversationRelationship
      */
     public function secondUser()
     {
-        return $this->belongsTo(config('laravel-video-chat.user.model') , 'second_user_id');
+        return $this->belongsTo(config('laravel-video-chat.user.model'), 'second_user_id');
     }
 }

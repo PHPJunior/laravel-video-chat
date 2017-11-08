@@ -3,11 +3,10 @@
  * Created by PhpStorm.
  * User: nyinyilwin
  * Date: 11/8/17
- * Time: 7:48 AM
+ * Time: 7:48 AM.
  */
 
 namespace PhpJunior\LaravelVideoChat\Models\File\Attribute;
-
 
 trait FileAttribute
 {

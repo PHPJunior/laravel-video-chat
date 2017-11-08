@@ -8,9 +8,8 @@ use PhpJunior\LaravelVideoChat\Models\File\File;
  * Created by PhpStorm.
  * User: nyinyilwin
  * Date: 10/17/17
- * Time: 3:18 PM
+ * Time: 3:18 PM.
  */
-
 trait MessageRelationship
 {
     /**
@@ -26,7 +25,7 @@ trait MessageRelationship
      */
     public function sender()
     {
-        return $this->belongsTo(config('laravel-video-chat.user.model') , 'user_id');
+        return $this->belongsTo(config('laravel-video-chat.user.model'), 'user_id');
     }
 
     /**
@@ -34,6 +33,6 @@ trait MessageRelationship
      */
     public function files()
     {
-        return $this->hasMany(File::class , 'message_id');
+        return $this->hasMany(File::class, 'message_id');
     }
 }

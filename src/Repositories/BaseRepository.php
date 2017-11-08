@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class BaseRepository
 {
-
     /**
      * @return mixed
      */
@@ -17,6 +16,7 @@ class BaseRepository
 
     /**
      * @param $id
+     *
      * @return mixed
      */
     public function find($id)
@@ -43,6 +43,7 @@ class BaseRepository
     /**
      * @param Model $model
      * @param array $input
+     *
      * @return bool
      */
     public function update(Model $model, array $input)
@@ -58,6 +59,7 @@ class BaseRepository
 
     /**
      * @param Model $model
+     *
      * @return bool|null
      */
     public function delete(Model $model)
@@ -73,6 +75,7 @@ class BaseRepository
 
     /**
      * @param Model $model
+     *
      * @return bool
      */
     public function save(Model $model)
@@ -88,6 +91,7 @@ class BaseRepository
 
     /**
      * @param $count
+     *
      * @return mixed
      */
     public function paginate($count)

@@ -12,7 +12,7 @@ class Conversation extends Model
     protected $table;
 
     protected $fillable = [
-        'first_user_id' , 'second_user_id' , 'is_accepted'
+        'first_user_id', 'second_user_id', 'is_accepted',
     ];
 
     /**

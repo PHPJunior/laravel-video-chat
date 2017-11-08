@@ -23,6 +23,7 @@ class ConversationRepository extends BaseRepository
 
     /**
      * ConversationRepository constructor.
+     *
      * @param UploadManager $manager
      */
     public function __construct(UploadManager $manager)
@@ -32,6 +33,7 @@ class ConversationRepository extends BaseRepository
 
     /**
      * @param $user
+     *
      * @return \Illuminate\Support\Collection
      */
     public function getAllConversations($user)
@@ -55,14 +57,15 @@ class ConversationRepository extends BaseRepository
     /**
      * @param $user
      * @param $conversation
+     *
      * @return bool
      */
-    public function canJoinConversation($user , $conversation)
+    public function canJoinConversation($user, $conversation)
     {
         $thread = $this->find($conversation);
 
-        if ($thread){
-            if (($thread->first_user_id == $user->id) || ($thread->second_user_id == $user->id)){
+        if ($thread) {
+            if (($thread->first_user_id == $user->id) || ($thread->second_user_id == $user->id)) {
                 return true;
             }
         }
@@ -74,11 +77,12 @@ class ConversationRepository extends BaseRepository
      * @param $conversationId
      * @param $userID
      * @param $channel
+     *
      * @return object
      */
-    public function getConversationMessageById($conversationId , $userID , $channel)
+    public function getConversationMessageById($conversationId, $userID, $channel)
     {
-        $conversation = $this->query()->with(['messages','messages.sender', 'messages.files' ,'firstUser', 'secondUser', 'files'])->find($conversationId);
+        $conversation = $this->query()->with(['messages', 'messages.sender', 'messages.files', 'firstUser', 'secondUser', 'files'])->find($conversationId);
 
         $collection = (object) null;
         $collection->conversationId = $conversationId;
@@ -93,9 +97,10 @@ class ConversationRepository extends BaseRepository
     /**
      * @param $conversationId
      * @param array $data
+     *
      * @return bool
      */
-    public function sendConversationMessage($conversationId , array $data)
+    public function sendConversationMessage($conversationId, array $data)
     {
         return $this->sendMessage($conversationId, $data);
     }
@@ -104,24 +109,25 @@ class ConversationRepository extends BaseRepository
      * @param array $data
      * @param $channel
      */
-    public function startVideoCall(array $data , $channel)
+    public function startVideoCall(array $data, $channel)
     {
-        broadcast(new VideoChatStart($data , $channel));
+        broadcast(new VideoChatStart($data, $channel));
     }
 
     /**
      * @param $firstUserId
      * @param $secondUserId
+     *
      * @return bool
      */
     public function startConversationWith($firstUserId, $secondUserId)
     {
         $created = $this->query()->create([
-            'first_user_id'     =>  $firstUserId,
-            'second_user_id'    =>  $secondUserId
+            'first_user_id'  => $firstUserId,
+            'second_user_id' => $secondUserId,
         ]);
 
-        if ($created){
+        if ($created) {
             return true;
         }
 
@@ -131,12 +137,12 @@ class ConversationRepository extends BaseRepository
     /**
      * @param $userId
      * @param $conversationId
+     *
      * @return bool
      */
     public function acceptMessageRequest($userId, $conversationId)
     {
-        if($this->checkUserExist($userId , $conversationId)){
-
+        if ($this->checkUserExist($userId, $conversationId)) {
             $conversation = $this->find($conversationId);
             $conversation->is_accepted = true;
             $conversation->save();
@@ -150,14 +156,15 @@ class ConversationRepository extends BaseRepository
     /**
      * @param $userId
      * @param $conversationId
+     *
      * @return bool
      */
     public function checkUserExist($userId, $conversationId)
     {
         $thread = $this->find($conversationId);
 
-        if ($thread){
-            if (($thread->first_user_id == $userId) || ($thread->second_user_id == $userId)){
+        if ($thread) {
+            if (($thread->first_user_id == $userId) || ($thread->second_user_id == $userId)) {
                 return true;
             }
         }
@@ -173,6 +180,7 @@ class ConversationRepository extends BaseRepository
     /**
      * @param $conversationId
      * @param array $data
+     *
      * @return bool
      */
     private function sendMessage($conversationId, array $data)
@@ -181,25 +189,23 @@ class ConversationRepository extends BaseRepository
 
         $created = $conversation->messages()
             ->create([
-                'text' => $data['text'],
-                'user_id' => $data['user_id']
+                'text'    => $data['text'],
+                'user_id' => $data['user_id'],
             ]);
 
         if ($created) {
-
-            if (array_key_exists('file', $data )) {
-                foreach ($data['file'] as $file){
-
-                    $fileName = Carbon::now()->format('YmdHis') .'-'.$file->getClientOriginalName();
-                    $path = str_finish( '' , '/') . $fileName;
+            if (array_key_exists('file', $data)) {
+                foreach ($data['file'] as $file) {
+                    $fileName = Carbon::now()->format('YmdHis').'-'.$file->getClientOriginalName();
+                    $path = str_finish('', '/').$fileName;
                     $content = File::get($file->getRealPath());
                     $result = $this->manager->saveFile($path, $content);
 
                     if ($result === true) {
                         $conversation->files()->create([
                             'message_id' => $created->id,
-                            'name'  => $fileName,
-                            'user_id' => $data['user_id']
+                            'name'       => $fileName,
+                            'user_id'    => $data['user_id'],
                         ]);
                     }
                 }
@@ -208,6 +214,7 @@ class ConversationRepository extends BaseRepository
             $data['files'] = $conversation->messages()->find($created->id)->files()->get();
 
             broadcast(new NewConversationMessage($data['text'], $data['channel'], $data['files']));
+
             return true;
         }
 

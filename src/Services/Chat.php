@@ -19,16 +19,16 @@ class Chat
 
     /**
      * Chat constructor.
+     *
      * @param $config
-     * @param ConversationRepository $conversation
+     * @param ConversationRepository      $conversation
      * @param GroupConversationRepository $group
      */
     public function __construct(
-        $config ,
-        ConversationRepository $conversation ,
+        $config,
+        ConversationRepository $conversation,
         GroupConversationRepository $group
-    )
-    {
+    ) {
         $this->config = $config;
         $this->conversation = $conversation;
         $this->userId = check() ? check()->user()->id : null;
@@ -45,13 +45,15 @@ class Chat
 
     /**
      * @param $conversationId
+     *
      * @return object
      */
     public function getConversationMessageById($conversationId)
     {
-        if ($this->conversation->checkUserExist( $this->userId, $conversationId )){
-            $channel = $this->getChannelName($conversationId,'chat_room');
-            return $this->conversation->getConversationMessageById($conversationId , $this->userId , $channel);
+        if ($this->conversation->checkUserExist($this->userId, $conversationId)) {
+            $channel = $this->getChannelName($conversationId, 'chat_room');
+
+            return $this->conversation->getConversationMessageById($conversationId, $this->userId, $channel);
         }
 
         abort(404);
@@ -61,23 +63,23 @@ class Chat
      * @param $conversationId
      * @param $text
      */
-    public function sendConversationMessage($conversationId , $text)
+    public function sendConversationMessage($conversationId, $text)
     {
-        $this->conversation->sendConversationMessage($conversationId , [
-            'text'      => $text,
-            'user_id'   => $this->userId,
-            'channel'   => $this->getChannelName($conversationId,'chat_room')
-        ] );
+        $this->conversation->sendConversationMessage($conversationId, [
+            'text'    => $text,
+            'user_id' => $this->userId,
+            'channel' => $this->getChannelName($conversationId, 'chat_room'),
+        ]);
     }
 
     /**
      * @param $conversationId
      * @param array $data
      */
-    public function startVideoCall($conversationId , array $data)
+    public function startVideoCall($conversationId, array $data)
     {
-        $channel = $this->getChannelName($conversationId,'chat_room');
-        $this->conversation->startVideoCall( $data, $channel );
+        $channel = $this->getChannelName($conversationId, 'chat_room');
+        $this->conversation->startVideoCall($data, $channel);
     }
 
     /**
@@ -85,7 +87,7 @@ class Chat
      */
     public function startConversationWith($userId)
     {
-        $this->conversation->startConversationWith($this->userId , $userId);
+        $this->conversation->startConversationWith($this->userId, $userId);
     }
 
     /**
@@ -93,27 +95,28 @@ class Chat
      */
     public function acceptMessageRequest($conversationId)
     {
-        $this->conversation->acceptMessageRequest($this->userId , $conversationId);
+        $this->conversation->acceptMessageRequest($this->userId, $conversationId);
     }
 
     /**
      * @param $conversationId
      * @param $type
+     *
      * @return string
      */
-    private function getChannelName($conversationId , $type)
+    private function getChannelName($conversationId, $type)
     {
-        return $this->config->get('laravel-video-chat.channel.' . $type) . '-' . $conversationId;
+        return $this->config->get('laravel-video-chat.channel.'.$type).'-'.$conversationId;
     }
 
     /**
      * @param $groupName
      * @param array $users
      */
-    public function createGroupConversation($groupName , array $users)
+    public function createGroupConversation($groupName, array $users)
     {
         $users[] = $this->userId;
-        $this->group->createGroupConversation($groupName , $users);
+        $this->group->createGroupConversation($groupName, $users);
     }
 
     /**
@@ -126,13 +129,15 @@ class Chat
 
     /**
      * @param $groupConversationId
+     *
      * @return object
      */
     public function getGroupConversationMessageById($groupConversationId)
     {
-        if ($this->group->checkUserExist( $this->userId, $groupConversationId )){
-            $channel = $this->getChannelName($groupConversationId,'group_chat_room');
-            return $this->group->getGroupConversationMessageById($groupConversationId , $channel);
+        if ($this->group->checkUserExist($this->userId, $groupConversationId)) {
+            $channel = $this->getChannelName($groupConversationId, 'group_chat_room');
+
+            return $this->group->getGroupConversationMessageById($groupConversationId, $channel);
         }
 
         abort(404);
@@ -142,31 +147,31 @@ class Chat
      * @param $groupConversationId
      * @param $text
      */
-    public function sendGroupConversationMessage($groupConversationId , $text)
+    public function sendGroupConversationMessage($groupConversationId, $text)
     {
-        $this->group->sendGroupConversationMessage($groupConversationId , [
-            'text'      => $text,
-            'user_id'   => $this->userId,
-            'channel'   => $this->getChannelName($groupConversationId,'group_chat_room')
-        ] );
+        $this->group->sendGroupConversationMessage($groupConversationId, [
+            'text'    => $text,
+            'user_id' => $this->userId,
+            'channel' => $this->getChannelName($groupConversationId, 'group_chat_room'),
+        ]);
     }
 
     /**
      * @param $groupConversationId
      * @param array $users
      */
-    public function removeMembersFromGroupConversation($groupConversationId , array $users)
+    public function removeMembersFromGroupConversation($groupConversationId, array $users)
     {
-        $this->group->removeMembersFromGroupConversation($groupConversationId , $users);
+        $this->group->removeMembersFromGroupConversation($groupConversationId, $users);
     }
 
     /**
      * @param $groupConversationId
      * @param array $users
      */
-    public function addMembersToExistingGroupConversation($groupConversationId , array $users)
+    public function addMembersToExistingGroupConversation($groupConversationId, array $users)
     {
-        $this->group->addMembersToExistingGroupConversation($groupConversationId , $users);
+        $this->group->addMembersToExistingGroupConversation($groupConversationId, $users);
     }
 
     /**
@@ -174,44 +179,44 @@ class Chat
      */
     public function leaveFromGroupConversation($groupConversationId)
     {
-        $this->group->leaveFromGroupConversation($groupConversationId , $this->userId);
+        $this->group->leaveFromGroupConversation($groupConversationId, $this->userId);
     }
 
     /**
      * @param $conversationId
      * @param $file
      */
-    public function sendFilesInConversation($conversationId , $file)
+    public function sendFilesInConversation($conversationId, $file)
     {
-        $this->sendFiles($conversationId , $file , 'conversation');
+        $this->sendFiles($conversationId, $file, 'conversation');
     }
 
     /**
      * @param $groupConversationId
      * @param $file
      */
-    public function sendFilesInGroupConversation($groupConversationId , $file)
+    public function sendFilesInGroupConversation($groupConversationId, $file)
     {
-        $this->sendFiles($groupConversationId , $file , 'group');
+        $this->sendFiles($groupConversationId, $file, 'group');
     }
 
-    private function sendFiles($id , $file , $type)
+    private function sendFiles($id, $file, $type)
     {
         switch ($type) {
             case 'conversation':
-                $this->conversation->sendFilesInConversation($id , [
-                    'file'      => $file,
-                    'text'      => 'File Sent',
-                    'user_id'   => $this->userId,
-                    'channel'   => $this->getChannelName($id,'chat_room')
+                $this->conversation->sendFilesInConversation($id, [
+                    'file'    => $file,
+                    'text'    => 'File Sent',
+                    'user_id' => $this->userId,
+                    'channel' => $this->getChannelName($id, 'chat_room'),
                 ]);
                 break;
             case 'group':
-                $this->group->sendFilesInConversation($id , [
-                    'file'      => $file,
-                    'text'      => 'File Sent',
-                    'user_id'   => $this->userId,
-                    'channel'   => $this->getChannelName($id,'group_chat_room')
+                $this->group->sendFilesInConversation($id, [
+                    'file'    => $file,
+                    'text'    => 'File Sent',
+                    'user_id' => $this->userId,
+                    'channel' => $this->getChannelName($id, 'group_chat_room'),
                 ]);
                 break;
         }

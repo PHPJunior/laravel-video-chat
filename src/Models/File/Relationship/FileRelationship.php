@@ -3,11 +3,10 @@
  * Created by PhpStorm.
  * User: nyinyilwin
  * Date: 11/7/17
- * Time: 10:54 PM
+ * Time: 10:54 PM.
  */
 
 namespace PhpJunior\LaravelVideoChat\Models\File\Relationship;
-
 
 use PhpJunior\LaravelVideoChat\Models\Message\Message;
 
@@ -26,7 +25,7 @@ trait FileRelationship
      */
     public function message()
     {
-        return $this->belongsTo(Message::class , 'message_id');
+        return $this->belongsTo(Message::class, 'message_id');
     }
 
     /**
@@ -34,6 +33,6 @@ trait FileRelationship
      */
     public function sender()
     {
-        return $this->belongsTo(config('laravel-video-chat.user.model') , 'user_id');
+        return $this->belongsTo(config('laravel-video-chat.user.model'), 'user_id');
     }
 }

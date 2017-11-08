@@ -12,7 +12,7 @@ class Message extends Model
     protected $table;
 
     protected $fillable = [
-        'user_id' , 'text'
+        'user_id', 'text',
     ];
 
     /**

@@ -13,11 +13,11 @@ class File extends Model
     protected $table;
 
     protected $fillable = [
-        'message_id' , 'user_id' , 'name'
+        'message_id', 'user_id', 'name',
     ];
 
     protected $appends = [
-        'file_details'
+        'file_details',
     ];
 
     /**
