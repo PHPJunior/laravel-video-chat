@@ -7,14 +7,13 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\ServiceProvider;
 use PhpJunior\LaravelVideoChat\Facades\Chat;
+use PhpJunior\LaravelVideoChat\Repositories\Conversation\ConversationRepository;
 use PhpJunior\LaravelVideoChat\Repositories\GroupConversation\GroupConversationRepository;
 use PhpJunior\LaravelVideoChat\Services\Chat as ChatService;
-use PhpJunior\LaravelVideoChat\Repositories\Conversation\ConversationRepository;
 use PhpJunior\LaravelVideoChat\Services\UploadManager;
 
 class LaravelVideoChatServiceProvider extends ServiceProvider
 {
-
     /**
      * Bootstrap the application services.
      *
@@ -25,8 +24,8 @@ class LaravelVideoChatServiceProvider extends ServiceProvider
         Relation::morphMap(config('laravel-video-chat.relation'));
 
         $this->publishes([
-            $this->configPath() => config_path('laravel-video-chat.php'),
-            $this->componentsPath() => base_path('resources/assets/js/components/laravel-video-chat')
+            $this->configPath()     => config_path('laravel-video-chat.php'),
+            $this->componentsPath() => base_path('resources/assets/js/components/laravel-video-chat'),
         ]);
 
         $this->loadMigrationsFrom($this->migrationsPath());
@@ -60,7 +59,8 @@ class LaravelVideoChatServiceProvider extends ServiceProvider
         $this->app->singleton('upload.manager', function ($app) {
             $mime = $app[PhpRepository::class];
             $config = $app['config'];
-            return new UploadManager($config , $mime);
+
+            return new UploadManager($config, $mime);
         });
         $this->app->alias('upload.manager', UploadManager::class);
     }
@@ -71,7 +71,8 @@ class LaravelVideoChatServiceProvider extends ServiceProvider
             $config = $app['config'];
             $conversation = $app['conversation.repository'];
             $group = $app['group.conversation.repository'];
-            return new ChatService($config , $conversation , $group);
+
+            return new ChatService($config, $conversation, $group);
         });
     }
 
@@ -79,12 +80,14 @@ class LaravelVideoChatServiceProvider extends ServiceProvider
     {
         $this->app->singleton('conversation.repository', function ($app) {
             $manger = $app['upload.manager'];
+
             return new ConversationRepository($manger);
         });
         $this->app->alias('conversation.repository', ConversationRepository::class);
 
         $this->app->singleton('group.conversation.repository', function ($app) {
             $manger = $app['upload.manager'];
+
             return new GroupConversationRepository($manger);
         });
         $this->app->alias('group.conversation.repository', GroupConversationRepository::class);
@@ -94,8 +97,8 @@ class LaravelVideoChatServiceProvider extends ServiceProvider
     {
         Broadcast::channel(
             $this->app['config']->get('laravel-video-chat.channel.chat_room').'-{conversationId}',
-            function ( $user , $conversationId ) {
-                if ($this->app['conversation.repository']->canJoinConversation($user, $conversationId)){
+            function ($user, $conversationId) {
+                if ($this->app['conversation.repository']->canJoinConversation($user, $conversationId)) {
                     return $user;
                 }
             }
@@ -103,8 +106,8 @@ class LaravelVideoChatServiceProvider extends ServiceProvider
 
         Broadcast::channel(
             $this->app['config']->get('laravel-video-chat.channel.group_chat_room').'-{groupConversationId}',
-            function ( $user , $groupConversationId ) {
-                if ($this->app['group.conversation.repository']->canJoinGroupConversation($user, $groupConversationId)){
+            function ($user, $groupConversationId) {
+                if ($this->app['group.conversation.repository']->canJoinGroupConversation($user, $groupConversationId)) {
                     return $user;
                 }
             }
@@ -116,7 +119,7 @@ class LaravelVideoChatServiceProvider extends ServiceProvider
      */
     protected function configPath()
     {
-        return __DIR__ . '/../config/laravel-video-chat.php';
+        return __DIR__.'/../config/laravel-video-chat.php';
     }
 
     /**
@@ -124,7 +127,7 @@ class LaravelVideoChatServiceProvider extends ServiceProvider
      */
     protected function migrationsPath()
     {
-        return __DIR__ . '/../database/migrations';
+        return __DIR__.'/../database/migrations';
     }
 
     /**
@@ -145,7 +148,7 @@ class LaravelVideoChatServiceProvider extends ServiceProvider
         return [
             'conversation.repository',
             'group.conversation.repository',
-            'upload.manager'
+            'upload.manager',
         ];
     }
 }

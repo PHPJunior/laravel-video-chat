@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: nyinyilwin
  * Date: 10/21/17
- * Time: 11:27 PM
+ * Time: 11:27 PM.
  */
 
 namespace PhpJunior\LaravelVideoChat\Repositories\GroupConversation;
@@ -28,6 +28,7 @@ class GroupConversationRepository extends BaseRepository
 
     /**
      * GroupConversationRepository constructor.
+     *
      * @param UploadManager $manager
      */
     public function __construct(UploadManager $manager)
@@ -37,6 +38,7 @@ class GroupConversationRepository extends BaseRepository
 
     /**
      * @param $user
+     *
      * @return \Illuminate\Support\Collection
      */
     public function getAllGroupConversations($user)
@@ -45,7 +47,7 @@ class GroupConversationRepository extends BaseRepository
             ->with([
                 'messages' => function ($query) {
                     return $query->latest();
-                } , 'users'
+                }, 'users',
             ])->whereHas('users', function ($query) use ($user) {
                 $query->where('id', $user);
             })->get();
@@ -56,11 +58,12 @@ class GroupConversationRepository extends BaseRepository
     /**
      * @param $groupConversationId
      * @param $channel
+     *
      * @return object
      */
-    public function getGroupConversationMessageById($groupConversationId , $channel)
+    public function getGroupConversationMessageById($groupConversationId, $channel)
     {
-        $conversation = $this->query()->with(['messages','messages.sender', 'messages.files' , 'users' , 'files'])->find($groupConversationId);
+        $conversation = $this->query()->with(['messages', 'messages.sender', 'messages.files', 'users', 'files'])->find($groupConversationId);
 
         $collection = (object) null;
         $collection->group_conversation = $conversation;
@@ -75,16 +78,18 @@ class GroupConversationRepository extends BaseRepository
     /**
      * @param $groupName
      * @param array $users
+     *
      * @return bool
      */
-    public function createGroupConversation($groupName , array $users)
+    public function createGroupConversation($groupName, array $users)
     {
         $group = $this->query()->create([
-            'name' => $groupName
+            'name' => $groupName,
         ]);
 
-        if ($group){
+        if ($group) {
             $group->users()->attach($users);
+
             return true;
         }
 
@@ -94,14 +99,16 @@ class GroupConversationRepository extends BaseRepository
     /**
      * @param $groupConversationId
      * @param array $users
+     *
      * @return bool
      */
-    public function removeMembersFromGroupConversation($groupConversationId , array $users)
+    public function removeMembersFromGroupConversation($groupConversationId, array $users)
     {
         $group = $this->find($groupConversationId);
 
-        if ($group){
+        if ($group) {
             $group->users()->detach($users);
+
             return true;
         }
 
@@ -111,14 +118,16 @@ class GroupConversationRepository extends BaseRepository
     /**
      * @param $groupConversationId
      * @param $userId
+     *
      * @return bool
      */
-    public function leaveFromGroupConversation($groupConversationId , $userId)
+    public function leaveFromGroupConversation($groupConversationId, $userId)
     {
         $group = $this->find($groupConversationId);
 
-        if ($group){
+        if ($group) {
             $group->users()->detach($userId);
+
             return true;
         }
 
@@ -128,14 +137,16 @@ class GroupConversationRepository extends BaseRepository
     /**
      * @param $groupConversationId
      * @param array $users
+     *
      * @return bool
      */
-    public function addMembersToExistingGroupConversation($groupConversationId , array $users)
+    public function addMembersToExistingGroupConversation($groupConversationId, array $users)
     {
         $group = $this->find($groupConversationId);
 
-        if ($group){
+        if ($group) {
             $group->users()->attach($users);
+
             return true;
         }
 
@@ -145,15 +156,16 @@ class GroupConversationRepository extends BaseRepository
     /**
      * @param $user
      * @param $groupConversationId
+     *
      * @return bool
      */
-    public function canJoinGroupConversation($user , $groupConversationId)
+    public function canJoinGroupConversation($user, $groupConversationId)
     {
         $group = $this->find($groupConversationId);
 
-        if ($group){
-            foreach ($group->users()->get() as $member){
-                if ($member->id == $user->id){
+        if ($group) {
+            foreach ($group->users()->get() as $member) {
+                if ($member->id == $user->id) {
                     return true;
                 }
             }
@@ -165,15 +177,16 @@ class GroupConversationRepository extends BaseRepository
     /**
      * @param $userId
      * @param $groupConversationId
+     *
      * @return bool
      */
     public function checkUserExist($userId, $groupConversationId)
     {
         $group = $this->find($groupConversationId);
 
-        if ($group){
-            foreach ($group->users()->get() as $member){
-                if ($member->id == $userId){
+        if ($group) {
+            foreach ($group->users()->get() as $member) {
+                if ($member->id == $userId) {
                     return true;
                 }
             }
@@ -185,6 +198,7 @@ class GroupConversationRepository extends BaseRepository
     /**
      * @param $groupConversationId
      * @param array $data
+     *
      * @return bool
      */
     public function sendGroupConversationMessage($groupConversationId, array $data)
@@ -200,6 +214,7 @@ class GroupConversationRepository extends BaseRepository
     /**
      * @param $groupConversationId
      * @param array $data
+     *
      * @return bool
      */
     private function sendMessage($groupConversationId, array $data)
@@ -208,25 +223,23 @@ class GroupConversationRepository extends BaseRepository
 
         $created = $conversation->messages()
             ->create([
-                'text' => $data['text'],
-                'user_id' => $data['user_id']
+                'text'    => $data['text'],
+                'user_id' => $data['user_id'],
             ]);
 
         if ($created) {
-
-            if (array_key_exists('file', $data )) {
-                foreach ($data['file'] as $file){
-
-                    $fileName = Carbon::now()->format('YmdHis') .'-'.$file->getClientOriginalName();
-                    $path = str_finish( '' , '/') . $fileName;
+            if (array_key_exists('file', $data)) {
+                foreach ($data['file'] as $file) {
+                    $fileName = Carbon::now()->format('YmdHis').'-'.$file->getClientOriginalName();
+                    $path = str_finish('', '/').$fileName;
                     $content = File::get($file->getRealPath());
                     $result = $this->manager->saveFile($path, $content);
 
                     if ($result === true) {
                         $conversation->files()->create([
                             'message_id' => $created->id,
-                            'name'  => $fileName,
-                            'user_id' => $data['user_id']
+                            'name'       => $fileName,
+                            'user_id'    => $data['user_id'],
                         ]);
                     }
                 }
@@ -235,6 +248,7 @@ class GroupConversationRepository extends BaseRepository
             $data['files'] = $conversation->messages()->find($created->id)->files()->get();
 
             broadcast(new NewGroupConversationMessage($data['text'], $data['channel'], $data['files']));
+
             return true;
         }
 

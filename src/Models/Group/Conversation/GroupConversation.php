@@ -12,7 +12,7 @@ class GroupConversation extends Model
     protected $table;
 
     protected $fillable = [
-        'name'
+        'name',
     ];
 
     /**

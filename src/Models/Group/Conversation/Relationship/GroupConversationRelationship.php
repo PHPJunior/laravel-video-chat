@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: nyinyilwin
  * Date: 10/22/17
- * Time: 12:05 AM
+ * Time: 12:05 AM.
  */
 
 namespace PhpJunior\LaravelVideoChat\Models\Group\Conversation\Relationship;
@@ -19,7 +19,7 @@ trait GroupConversationRelationship
     public function users()
     {
         return $this->belongsToMany(
-            config('laravel-video-chat.user.model') ,
+            config('laravel-video-chat.user.model'),
             config('laravel-video-chat.table.group_users_table'),
             'group_conversation_id',
             'user_id'
@@ -31,7 +31,7 @@ trait GroupConversationRelationship
      */
     public function messages()
     {
-        return $this->morphMany(Message::class,'conversation');
+        return $this->morphMany(Message::class, 'conversation');
     }
 
     /**
@@ -39,6 +39,6 @@ trait GroupConversationRelationship
      */
     public function files()
     {
-        return $this->morphMany(File::class,'conversation');
+        return $this->morphMany(File::class, 'conversation');
     }
 }
