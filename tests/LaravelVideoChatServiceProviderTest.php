@@ -3,11 +3,10 @@
  * Created by PhpStorm.
  * User: nyinyilwin
  * Date: 11/10/17
- * Time: 1:20 AM
+ * Time: 1:20 AM.
  */
 
 namespace PhpJunior\LaravelVideoChat\Tests;
-
 
 use GrahamCampbell\TestBenchCore\ServiceProviderTrait;
 use PhpJunior\LaravelVideoChat\Services\Chat;

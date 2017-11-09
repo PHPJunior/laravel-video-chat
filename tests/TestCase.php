@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: nyinyilwin
  * Date: 11/10/17
- * Time: 1:18 AM
+ * Time: 1:18 AM.
  */
 
 namespace PhpJunior\LaravelVideoChat\Tests;
