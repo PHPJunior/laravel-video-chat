@@ -20,7 +20,10 @@
     "require": {
         "php": ">=5.6.4",
         "predis/predis": "^1.1",
-        "dflydev/apache-mime-types": "^1.0"
+        "dflydev/apache-mime-types": "^1.0",
+        "illuminate/support": "^5.5",
+        "illuminate/database": "^5.5",
+        "illuminate/contracts": "^5.5"
     },
     "autoload": {
         "psr-4": {
@@ -29,6 +32,11 @@
         "files": [
             "helper/helpers.php"
         ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PhpJunior\\LaravelVideoChat\\Tests\\": "tests/"
+        }
     },
     "extra": {
         "laravel": {
@@ -39,5 +47,9 @@
                 "Chat": "PhpJunior\\LaravelVideoChat\\Facades\\Chat"
             }
         }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.4",
+        "graham-campbell/testbench": "^4.0"
     }
 }

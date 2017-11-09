@@ -2,30 +2,31 @@
 
 namespace PhpJunior\LaravelVideoChat\Services;
 
+use Illuminate\Contracts\Config\Repository;
 use PhpJunior\LaravelVideoChat\Repositories\Conversation\ConversationRepository;
 use PhpJunior\LaravelVideoChat\Repositories\GroupConversation\GroupConversationRepository;
 
 class Chat
 {
-    private $config;
+    protected $config;
 
-    private $conversation;
+    protected $conversation;
 
-    private $userId;
+    protected $userId;
     /**
      * @var GroupConversationRepository
      */
-    private $group;
+    protected $group;
 
     /**
      * Chat constructor.
      *
-     * @param $config
+     * @param Repository                  $config
      * @param ConversationRepository      $conversation
      * @param GroupConversationRepository $group
      */
     public function __construct(
-        $config,
+        Repository $config,
         ConversationRepository $conversation,
         GroupConversationRepository $group
     ) {
