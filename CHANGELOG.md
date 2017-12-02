@@ -1,6 +1,10 @@
 CHANGE LOG
 ==========
 
+## v1.1.5
+
+* Travis CI
+
 ## v1.1.4
 
 * [ Added ] File Preview Component

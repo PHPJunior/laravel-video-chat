@@ -1,6 +1,7 @@
 # Laravel Video Chat
 Laravel Video Chat using Socket.IO and WebRTC
 
+[![Build Status](https://travis-ci.org/PHPJunior/laravel-video-chat.svg?branch=master)](https://travis-ci.org/PHPJunior/laravel-video-chat)
 [![StyleCI](https://styleci.io/repos/107812103/shield?branch=master)](https://styleci.io/repos/107812103)
 [![Latest Stable Version](https://poser.pugx.org/php-junior/laravel-video-chat/v/stable)](https://packagist.org/packages/php-junior/laravel-video-chat)
 [![Total Downloads](https://poser.pugx.org/php-junior/laravel-video-chat/downloads)](https://packagist.org/packages/php-junior/laravel-video-chat)
