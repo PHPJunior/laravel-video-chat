@@ -26,11 +26,9 @@
                                     <p v-bind:class="{ 'pull-right' : check(message.sender.id) , 'pull-left' : !check(message.sender.id)}">
                                         {{ message.text }}
                                     </p>
+
                                     <div class="row">
-                                        <div class="col-md-3" v-for="file in message.files">
-                                            <img :src="file.file_details.webPath" alt="" class="img-responsive">
-                                            <a :href="file.file_details.webPath" target="_blank" download>Download - {{ file.name }}</a>
-                                        </div>
+                                        <file-preview :file="file" v-for="file in message.files" :key="file.id"></file-preview>
                                     </div>
                                 </div>
                             </li>
@@ -57,12 +55,11 @@
             </div>
         </div>
         </div>
+
         <div class="row">
-            <div class="col-md-3" v-for="file in conversation.files">
-                <img :src="file.file_details.webPath" alt="" class="img-responsive">
-                <a :href="file.file_details.webPath" target="_blank" download>Download - {{ file.name }}</a>
-            </div>
+            <file-preview :file="file" v-for="file in conversation.files" :key="file.id"></file-preview>
         </div>
+
     </div>
 </template>
 <script>
