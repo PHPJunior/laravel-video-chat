@@ -61,6 +61,18 @@ class Chat
     }
 
     /**
+     * @param $user
+     *
+     * @return object
+     */
+    public function getConversationMessageByUser($user)
+    {
+        $conversation_id=$this->conversation->getConversationMessageByUser($user, $this->userId);
+        $channel = $this->getChannelName($conversation_id, 'chat_room');
+        return $this->getConversationMessageById($conversation_id, $this->userId, $channel);
+    }
+
+    /**
      * @param $conversationId
      * @param $text
      */

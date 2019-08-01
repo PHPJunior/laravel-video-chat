@@ -46,6 +46,7 @@ class ConversationRepository extends BaseRepository
 
         foreach ($conversations as $conversation) {
             $collection = (object) null;
+            $collection->id = $conversation->id;
             $collection->message = $conversation->messages->first();
             $collection->user = ($conversation->firstUser->id == $user) ? $conversation->secondUser : $conversation->firstUser;
             $threads[] = $collection;
@@ -95,6 +96,30 @@ class ConversationRepository extends BaseRepository
     }
 
     /**
+     * @param $user
+     * @param $userID
+     *
+     *
+     * @return object
+     */
+    public function getConversationMessageByUser($user, $userID)
+    {
+        $conversation = Conversation::with(['messages' => function ($query) {
+            return $query->latest();
+        }, 'firstUser', 'secondUser'])->where(function ($q) use ($userID) {
+            $q->where('first_user_id', $userID)->orWhere('second_user_id', $userID);
+        })
+            ->where(function ($q) use ($user) {
+                $q->where('first_user_id', $user)->orWhere('second_user_id', $user);
+            })->first();
+        if ($conversation) {
+            return $conversation->id;
+        } else {
+            return $conversation_id = $this->startConversationWith($userID, $user)->id;
+        }
+    }
+
+    /**
      * @param $conversationId
      * @param array $data
      *
@@ -127,11 +152,7 @@ class ConversationRepository extends BaseRepository
             'second_user_id' => $secondUserId,
         ]);
 
-        if ($created) {
-            return true;
-        }
-
-        return false;
+        return $created;
     }
 
     /**
