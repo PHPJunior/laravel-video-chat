@@ -5,6 +5,7 @@ Laravel Video Chat using Socket.IO and WebRTC
 [![StyleCI](https://styleci.io/repos/107812103/shield?branch=master)](https://styleci.io/repos/107812103)
 [![Latest Stable Version](https://poser.pugx.org/php-junior/laravel-video-chat/v/stable)](https://packagist.org/packages/php-junior/laravel-video-chat)
 [![Total Downloads](https://poser.pugx.org/php-junior/laravel-video-chat/downloads)](https://packagist.org/packages/php-junior/laravel-video-chat)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FPHPJunior%2Flaravel-video-chat.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FPHPJunior%2Flaravel-video-chat?ref=badge_shield)
 
 ## Installation
 ```php
@@ -284,6 +285,9 @@ Chat::sendFilesInGroupConversation($groupConversationId , $request->file('files'
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
 
 [Demo Project](https://github.com/PHPJunior/laravel-video-chat-demo)
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FPHPJunior%2Flaravel-video-chat.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FPHPJunior%2Flaravel-video-chat?ref=badge_large)
 
 ## Support on Beerpay
 Hey dude! Help me out for a couple of :beers:!
